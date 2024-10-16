@@ -1,8 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'php:8.2-cli'  // Указываем контейнер с нужной версией PHP
-            args '-v /path/to/composer/cache:/root/.composer'  // Пример использования кеша Composer
+            image 'php:8.2-cli'  // Используем образ PHP
+            args '-v /path/to/composer/cache:/root/.composer'  // Используем кэш для Composer
         }
     }
 
@@ -13,42 +13,61 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Клонирование кода из GitHub
+                // Клонируем код из репозитория GitHub
                 git branch: 'master', url: 'https://github.com/peyotell/template.git'
+            }
+        }
+
+        stage('Install Composer') {
+            steps {
+                // Устанавливаем Composer, если он отсутствует
+                sh '''
+                php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+                php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+                php -r "unlink('composer-setup.php');"
+                '''
+            }
+        }
+
+        stage('Debug') {
+            steps {
+                // Диагностика: проверка доступности PHP, Composer и PHPUnit
+                sh 'php -v'
+                sh 'composer --version'
+                sh 'ls -lah /usr/local/bin'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                // Установка зависимостей через Composer
+                // Установка зависимостей с помощью Composer
                 sh 'composer install --prefer-dist --no-interaction'
             }
         }
 
         stage('Run Tests') {
             steps {
-                // Запуск PHPUnit тестов
+                // Запуск тестов через PHPUnit
                 sh './vendor/bin/phpunit'
             }
         }
 
         stage('Build') {
             steps {
-                // Пример сборки проекта (если есть шаг сборки)
+                // Шаг сборки (если необходимо)
                 echo 'Building the project...'
-                // sh 'phing build' // Включить, если используешь Phing
+                // Можешь добавить дополнительные команды сборки здесь
             }
         }
 
         stage('Deploy') {
             when {
-                branch 'master'  // Выполнять деплой только для основной ветки
+                branch 'master'  // Деплой только из основной ветки
             }
             steps {
-                // Пример деплоя через SSH или другой механизм
+                // Шаг деплоя (если требуется)
                 echo 'Deploying application...'
-                // sh 'phing deploy' // Включить, если деплой через Phing
-                // Или используем SCP/RSYNC для деплоя
+                // Пример деплоя через SCP/RSYNC или Phing
                 // sh 'scp -r ./build/* user@your-server:/path/to/deploy/'
             }
         }
@@ -56,15 +75,12 @@ pipeline {
 
     post {
         always {
-            // Действия, которые нужно выполнить после выполнения пайплайна
             echo 'Pipeline finished.'
         }
         success {
-            // Действия при успешном завершении (например, уведомление)
             echo 'Build and tests passed successfully.'
         }
         failure {
-            // Действия при неудаче (например, отправка уведомления об ошибке)
             echo 'Build or tests failed.'
         }
     }
