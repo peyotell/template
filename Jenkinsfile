@@ -20,17 +20,12 @@ pipeline {
 
         stage('Install Composer') {
             steps {
-                script {
-                    // Устанавливаем Composer, если он отсутствует
-                    sh '''
-                    if ! command -v composer &> /dev/null; then
-                        echo "Composer not found, installing..."
-                        curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-                    else
-                        echo "Composer is already installed."
-                    fi
-                    '''
-                }
+                // Устанавливаем Composer, если он отсутствует
+                sh '''
+                php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+                php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+                php -r "unlink('composer-setup.php');"
+                '''
             }
         }
 
