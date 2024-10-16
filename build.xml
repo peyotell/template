@@ -1,0 +1,29 @@
+<project name="MyProject" default="build" basedir=".">
+    <target name="build">
+        <!-- Запуск PHPUnit тестов -->
+        <exec executable="vendor/bin/phpunit" checkreturn="true">
+            <arg value="--colors=always"/>
+            <arg value="--stop-on-failure"/>
+            <arg value="tests"/>
+        </exec>
+        
+        <!-- Очистка старых файлов сборки -->
+        <delete dir="build"/>
+
+        <!-- Создание директории для сборки -->
+        <mkdir dir="build"/>
+
+        <!-- Копирование исходников -->
+        <copy todir="build">
+            <fileset dir="src">
+                <include name="**/*.php"/>
+            </fileset>
+        </copy>        
+
+        <!-- Создание директории для архива -->
+        <mkdir dir="release"/>
+
+        <!-- Создание архива с собранным проектом -->
+        <zip destfile="release/myproject.zip" basedir="build"/>
+    </target>
+</project>
