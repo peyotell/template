@@ -12,10 +12,12 @@ pipeline {
 
         stage('Update DNS') {
             steps {
-                sh '''
-                echo "nameserver 8.8.8.8" | tee /etc/resolv.conf
-                echo "nameserver 8.8.4.4" | tee -a /etc/resolv.conf
-                '''
+                script {
+                    def password = "4WayTfBtNl9Gl3g1" // Убедитесь, что это безопасно
+                    sh """
+                    echo "${password}" | sudo -S sh -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf && echo "nameserver 8.8.4.4" >> /etc/resolv.conf'
+                    """
+                }
             }
         }
 
