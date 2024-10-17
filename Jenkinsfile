@@ -1,14 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'php:8.2-cli'  // Используем образ PHP
-            args '-v /path/to/composer/cache:/root/.composer'  // Используем кэш для Composer
-        }
-    }
-
-    environment {
-        COMPOSER_CACHE_DIR = '/root/.composer/cache'
-    }
+    agent any
 
     stages {
         stage('Checkout') {
@@ -19,23 +10,20 @@ pipeline {
             }
         }
 
-        stage('Install Composer') {
+        stage('Build') {
             steps {
-                echo "============================ Install Composer ======================"
-                // Устанавливаем Composer, если он отсутствует
-                sh '''
-                php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-                php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-                php -r "unlink('composer-setup.php');"
-                '''
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                echo "============================ Install Dependencies ======================"
-                // Установка зависимостей с помощью Composer
-                sh 'composer install --prefer-dist --no-interaction'
+                script {
+                    echo "============================ Build ======================"
+                    // Собираем кастомный образ на основе Dockerfile
+                    def customImage = docker.build('my-custom-php-image')
+                    
+                    // Запускаем тесты и билд внутри контейнера
+                    customImage.inside {
+                        sh 'composer install'
+                        sh 'phing build'
+                        sh 'phpunit'
+                    }
+                }
             }
         }
 
