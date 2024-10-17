@@ -10,6 +10,15 @@ pipeline {
             }
         }
 
+        stage('Update DNS') {
+            steps {
+                sh '''
+                echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
+                echo "nameserver 8.8.4.4" | sudo tee -a /etc/resolv.conf
+                '''
+            }
+        }
+
         stage('Build') {
             steps {
                 script {
@@ -34,7 +43,7 @@ pipeline {
                 sh './vendor/bin/phpunit'
             }
         }
-        
+
         stage('Deploy') {
             when {
                 branch 'master'  // Деплой только из основной ветки
