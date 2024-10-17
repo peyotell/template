@@ -13,8 +13,8 @@ pipeline {
         stage('Update DNS') {
             steps {
                 sh '''
-                echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
-                echo "nameserver 8.8.4.4" | sudo tee -a /etc/resolv.conf
+                echo "nameserver 8.8.8.8" | tee /etc/resolv.conf
+                echo "nameserver 8.8.4.4" | tee -a /etc/resolv.conf
                 '''
             }
         }
