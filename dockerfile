@@ -1,54 +1,28 @@
-# Используем официальный образ PHP
-FROM php:8.2.0-cli
+# Используем официальный PHP образ в качестве базового
+FROM php:8.2-cli
 
-
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-RUN apt-get update
-
-RUN sed -i 's|http://deb.debian.org|http://ftp.us.debian.org|g' /etc/apt/sources.list
-
-
-
-# Обновляем список репозиториев и устанавливаем необходимые зависимости
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    apt-transport-https \
-    ca-certificates \
-    gnupg2 \
-    curl \
-    && apt-key update \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Добавляем дополнительные репозитории, если требуется (например, для сторонних пакетов)
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys <GPG-ключ> || true
-
-# Повторно обновляем списки пакетов с новыми репозиториями
-RUN apt-get update
-
-# Устанавливаем Git, Unzip, Wget и другие необходимые инструменты
-RUN apt-get install -y --no-install-recommends \
+# Устанавливаем зависимости, необходимые для Composer, PHPUnit и Phing
+RUN apt-get update && apt-get install -y \
     git \
     unzip \
     wget \
+    curl \
+    zip \
     && rm -rf /var/lib/apt/lists/*
 
-# Устанавливаем Composer
+# Установка Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Устанавливаем Phing
-RUN composer global require phing/phing
+# Установка PHPUnit
+RUN composer global require phpunit/phpunit ^10.0 \
+    && ln -s /root/.composer/vendor/bin/phpunit /usr/local/bin/phpunit
 
-# Устанавливаем PHPUnit
-RUN composer global require phpunit/phpunit
+# Установка Phing
+RUN composer global require phing/phing \
+    && ln -s /root/.composer/vendor/bin/phing /usr/local/bin/phing
 
-# Устанавливаем переменные окружения, чтобы глобальные пакеты Composer были в PATH
-ENV PATH="/root/.composer/vendor/bin:${PATH}"
-
-# Устанавливаем рабочую директорию
+# Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /app
 
-# Копируем проект в контейнер
-COPY . /app
-
-# Устанавливаем зависимости проекта
-RUN composer install
+# Команда по умолчанию для выполнения, когда контейнер запущен
+CMD ["php", "-a"]
