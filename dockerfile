@@ -1,6 +1,11 @@
 # Используем официальный образ PHP
 FROM php:8.3.0-cli
 
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt-get update
+
+
 # Обновляем список репозиториев и устанавливаем необходимые зависимости
 RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-transport-https \
