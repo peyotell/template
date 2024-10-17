@@ -5,6 +5,9 @@ FROM php:8.3.0-cli
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN apt-get update
 
+RUN sed -i 's|http://deb.debian.org|http://ftp.us.debian.org|g' /etc/apt/sources.list
+
+
 
 # Обновляем список репозиториев и устанавливаем необходимые зависимости
 RUN apt-get update && apt-get install -y --no-install-recommends \
