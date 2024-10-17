@@ -2,7 +2,7 @@
 FROM php:8.3.0-cli
 
 # Устанавливаем необходимые зависимости
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends\
     git \
     unzip \
     wget \
