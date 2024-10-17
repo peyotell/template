@@ -8,18 +8,7 @@ pipeline {
                 // Клонируем код из репозитория GitHub 
                 git branch: 'master', url: 'https://github.com/peyotell/template.git'
             }
-        }
-
-        stage('Update DNS') {
-            steps {
-                script {
-                    def password = "4WayTfBtNl9Gl3g1" // Убедитесь, что это безопасно
-                    sh """
-                    echo "${password}" | sudo -S sh -c 'echo "nameserver 8.8.8.8" > /etc/resolv.conf && echo "nameserver 8.8.4.4" >> /etc/resolv.conf'
-                    """
-                }
-            }
-        }
+        }        
 
         stage('Build') {
             steps {
