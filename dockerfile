@@ -1,7 +1,7 @@
 # Используем официальный PHP образ в качестве базового
 FROM php:8.2-cli
 
-# Устанавливаем зависимости, необходимые для Composer, PHPUnit и Phing
+# Устанавливаем необходимые системные зависимости
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -21,8 +21,8 @@ RUN composer global require phpunit/phpunit ^10.0 \
 RUN composer global require phing/phing \
     && ln -s /root/.composer/vendor/bin/phing /usr/local/bin/phing
 
-# Устанавливаем рабочую директорию внутри контейнера
+# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Команда по умолчанию для выполнения, когда контейнер запущен
+# Команда по умолчанию
 CMD ["php", "-a"]

@@ -1,63 +1,38 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'my-php-image' // Имя созданного Docker-образа
+            args '-v /path/to/composer/cache:/root/.composer' // Используем кэш Composer
+        }
+    }
 
     stages {
         stage('Checkout') {
             steps {
-                echo "============================ Checkout ======================"
-                // Клонируем код из репозитория GitHub 
-                git branch: 'master', url: 'https://github.com/peyotell/template.git'
+                // Получаем код с репозитория
+                git branch: 'main', url: 'https://github.com/your-repo-url.git'
             }
-        }        
+        }
 
-        stage('Build') {
+        stage('Install Dependencies') {
             steps {
-                script {
-                    echo "============================ Build ======================"
-                    // Собираем кастомный образ на основе Dockerfile
-                    def customImage = docker.build('my-custom-php-image')
-                    
-                    // Запускаем тесты и билд внутри контейнера
-                    customImage.inside {
-                        sh 'composer install'
-                        sh 'phing build'
-                        sh 'phpunit'
-                    }
-                }
+                // Устанавливаем зависимости через Composer
+                sh 'composer install'
             }
         }
 
         stage('Run Tests') {
             steps {
-                echo "============================ Run Tests ======================"
-                // Запуск тестов через PHPUnit
-                sh './vendor/bin/phpunit'
+                // Запускаем тесты с помощью PHPUnit
+                sh 'phpunit'
             }
         }
 
-        stage('Deploy') {
-            when {
-                branch 'master'  // Деплой только из основной ветки
-            }
+        stage('Run Phing') {
             steps {
-                echo "============================ Deploy ======================"
-                // Шаг деплоя (если требуется)
-                echo 'Deploying application...'
-                // Пример деплоя через SCP/RSYNC или Phing
-                // sh 'scp -r ./build/* user@your-server:/path/to/deploy/'
+                // Выполняем задачи через Phing
+                sh 'phing'
             }
-        }
-    }
-
-    post {
-        always {
-            echo 'Pipeline finished.'
-        }
-        success {
-            echo 'Build and tests passed successfully.'
-        }
-        failure {
-            echo 'Build or tests failed.'
         }
     }
 }
