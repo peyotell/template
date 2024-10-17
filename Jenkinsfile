@@ -13,6 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                echo "============================ Checkout ======================"
                 // Клонируем код из репозитория GitHub
                 git branch: 'master', url: 'https://github.com/peyotell/template.git'
             }
@@ -20,6 +21,7 @@ pipeline {
 
         stage('Install Composer') {
             steps {
+                echo "============================ Install Composer ======================"
                 // Устанавливаем Composer, если он отсутствует
                 sh '''
                 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -29,17 +31,9 @@ pipeline {
             }
         }
 
-        stage('Debug') {
-            steps {
-                // Диагностика: проверка доступности PHP, Composer и PHPUnit
-                sh 'php -v'
-                sh 'composer --version'
-                sh 'ls -lah /usr/local/bin'
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
+                echo "============================ Install Dependencies ======================"
                 // Установка зависимостей с помощью Composer
                 sh 'composer install --prefer-dist --no-interaction'
             }
@@ -47,6 +41,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
+                echo "============================ Run Tests ======================"
                 // Запуск тестов через PHPUnit
                 sh './vendor/bin/phpunit'
             }
@@ -54,6 +49,7 @@ pipeline {
 
         stage('Build') {
             steps {
+                echo "============================ Build ======================"
                 // Шаг сборки (если необходимо)
                 echo 'Building the project...'
                 // Можешь добавить дополнительные команды сборки здесь
@@ -65,6 +61,7 @@ pipeline {
                 branch 'master'  // Деплой только из основной ветки
             }
             steps {
+                echo "============================ Deploy ======================"
                 // Шаг деплоя (если требуется)
                 echo 'Deploying application...'
                 // Пример деплоя через SCP/RSYNC или Phing
