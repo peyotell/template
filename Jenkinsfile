@@ -1,37 +1,38 @@
 pipeline {
-    agent {
-        docker {
-            image 'my-php-image' // Имя созданного Docker-образа
-            args '-v /path/to/composer/cache:/root/.composer' // Используем кэш Composer
-        }
-    }
+    agent any
 
     stages {
         stage('Checkout') {
             steps {
-                // Получаем код с репозитория
+                // Получаем код из репозитория
                 git branch: 'main', url: 'https://github.com/your-repo-url.git'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Build Docker Image') {
             steps {
-                // Устанавливаем зависимости через Composer
-                sh 'composer install'
+                script {
+                    // Собираем Docker-образ на основе Dockerfile в рабочей директории Jenkins
+                    dockerImage = docker.build('my-php-image')
+                }
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Tests Inside Docker') {
             steps {
-                // Запускаем тесты с помощью PHPUnit
-                sh 'phpunit'
-            }
-        }
+                script {
+                    // Запускаем контейнер на основе созданного Docker-образа
+                    dockerImage.inside {
+                        // Устанавливаем зависимости с помощью Composer
+                        sh 'composer install'
 
-        stage('Run Phing') {
-            steps {
-                // Выполняем задачи через Phing
-                sh 'phing'
+                        // Запускаем тесты с PHPUnit
+                        sh 'phpunit'
+
+                        // Выполняем задачи с Phing
+                        sh 'phing'
+                    }
+                }
             }
         }
     }
