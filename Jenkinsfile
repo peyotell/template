@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo "============================ Checkout ======================"
-                // Клонируем код из репозитория GitHub
+                // Клонируем код из репозитория GitHub 
                 git branch: 'master', url: 'https://github.com/peyotell/template.git'
             }
         }
@@ -34,16 +34,7 @@ pipeline {
                 sh './vendor/bin/phpunit'
             }
         }
-
-        stage('Build') {
-            steps {
-                echo "============================ Build ======================"
-                // Шаг сборки (если необходимо)
-                echo 'Building the project...'
-                // Можешь добавить дополнительные команды сборки здесь
-            }
-        }
-
+        
         stage('Deploy') {
             when {
                 branch 'master'  // Деплой только из основной ветки
