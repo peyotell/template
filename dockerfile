@@ -1,5 +1,5 @@
 # Используем официальный образ PHP
-FROM php:8.3.0-cli
+FROM php:8.2.0-cli
 
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
