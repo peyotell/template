@@ -1,6 +1,8 @@
 # Используем официальный образ PHP
 FROM php:8.3.0-cli
 
+RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf
+
 # Обновляем список репозиториев и устанавливаем необходимые зависимости
 RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-transport-https \
