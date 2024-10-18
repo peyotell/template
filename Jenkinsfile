@@ -26,6 +26,9 @@ pipeline {
                         // Устанавливаем зависимости с помощью Composer
                         sh 'composer install'
 
+                        // Даем права на выполнение для phpunit и phing
+                        sh 'chmod +x vendor/bin/phpunit vendor/bin/phing'
+
                         // Запускаем тесты с PHPUnit
                         sh 'phpunit'
 
