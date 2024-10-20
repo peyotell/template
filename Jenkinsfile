@@ -30,7 +30,7 @@ pipeline {
                         sh 'chmod +x vendor/bin/phpunit vendor/bin/phing'
 
                         // Запускаем тесты с PHPUnit
-                        sh 'phpunit'
+                        sh 'vendor/bin/phpunit --configuration phpunit.xml'
 
                         // Выполняем задачи с Phing
                         sh 'phing'
