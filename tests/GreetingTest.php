@@ -8,6 +8,6 @@ class GreetingTest extends TestCase
 {
     public function testGreetReturnsHelloWorld()
     {
-        $this->assertEquals('Hello wrld', Greeting::greet());
+        $this->assertEquals('Hello world', Greeting::greet());
     }
 }
