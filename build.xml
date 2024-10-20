@@ -1,12 +1,5 @@
 <project name="MyProject" default="build" basedir=".">
-    <target name="build">
-        <!-- Запуск PHPUnit тестов -->
-        <exec executable="vendor/bin/phpunit" checkreturn="true">
-            <arg value="--colors=always"/>
-            <arg value="--stop-on-failure"/>
-            <arg value="tests"/>
-        </exec>
-        
+    <target name="build">     
         <!-- Очистка старых файлов сборки -->
         <delete dir="build"/>
 

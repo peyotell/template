@@ -27,9 +27,6 @@ bootstrap/cache/
 *.sublime-workspace
 *.sublime-project
 
-# Конфигурационные файлы Composer
-composer.lock
-
 # Конфигурационные файлы NPM/Yarn
 npm-debug.log*
 yarn-debug.log*
