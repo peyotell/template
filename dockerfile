@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     wget \
     curl \
-    zip \
+    libzip-dev \
+    && docker-php-ext-install zip \
     && rm -rf /var/lib/apt/lists/*
 
 # Установка Composer
