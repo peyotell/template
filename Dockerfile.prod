@@ -10,6 +10,10 @@ COPY composer.json composer.lock /var/www/html/
 COPY public /var/www/html/
 COPY src /var/www/src/
 
+# Устанавливаем права для файлов, чтобы Apache мог их обслуживать
+RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 755 /var/www/html
+
 # Устанавливаем зависимости
 RUN apt-get update && apt-get install -y zip unzip
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
