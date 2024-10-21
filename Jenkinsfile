@@ -33,7 +33,7 @@ pipeline {
                         sh 'vendor/bin/phpunit --configuration phpunit.xml'
 
                         // Выполняем задачи с Phing
-                        sh 'vendor/bin/phing'
+                        sh 'vendor/bin/phing -buildfile scripts/build.xml'
                     }
                 }
             }
