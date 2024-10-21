@@ -2,5 +2,11 @@
     "require-dev": {
         "phing/phing": "^3.0",
         "phpunit/phpunit": "^10.5"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Template\\": "src/" 
+        }
     }
 }

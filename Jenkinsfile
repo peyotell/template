@@ -18,7 +18,7 @@ pipeline {
             }
         }
 
-        stage('Run Tests Inside Docker') {
+        stage('Run Tests') {
             steps {
                 script {
                     // Запускаем контейнер на основе созданного Docker-образа
@@ -38,5 +38,31 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to Server') {
+            steps {
+                script {
+                    // Удаляем старый контейнер, если он есть
+                    sh 'docker rm -f my-php-app || true'
+
+                    // Запускаем новый контейнер
+                    sh '''
+                    docker run -d -p 80:80 \
+                        --name my-php-app \
+                        -v /path/to/data:/var/www/html \
+                        my-php-app
+                    '''
+                }
+            }
+        }
     }
+
+    post {
+        always {
+            // Всегда очищаем ненужные контейнеры
+            script {
+                sh 'docker system prune -f'
+            }
+        }
+    }    
 }
