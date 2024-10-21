@@ -4,7 +4,7 @@ FROM php:8.0-apache
 WORKDIR /var/www/html
 
 # Копируем файл composer.json в рабочую директорию
-COPY composer.json /var/www/html/
+COPY composer.json composer.lock /var/www/html/
 
 # Копируем остальной код приложения
 COPY public /var/www/html/
