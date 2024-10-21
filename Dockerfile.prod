@@ -1,16 +1,18 @@
 FROM php:8.0-apache
 
-# Копируем код приложения
-COPY ./public /var/www/html
-COPY ./src /var/www/src
-
 # Устанавливаем рабочую директорию
 WORKDIR /var/www/html
+
+# Копируем файл composer.json в рабочую директорию
+COPY composer.json /var/www/html/
+
+# Копируем остальной код приложения
+COPY public /var/www/html/
+COPY src /var/www/src/
 
 # Устанавливаем зависимости
 RUN apt-get update && apt-get install -y zip unzip
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-COPY ./composer.json /var/www/
 RUN composer install
 
 EXPOSE 80
