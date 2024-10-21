@@ -12,6 +12,7 @@ pipeline {
         stage('Build Production Container') {
             steps {
                 script {
+                    sh 'ls -la'   
                     // Собираем Docker-образ на основе Dockerfile в рабочей директории Jenkins
                     docker.build('my-php-app', '-f Dockerfile.prod .')
                 }
@@ -61,7 +62,7 @@ pipeline {
                         --name my-php-app \
                         -v /path/to/data:/var/www/html \
                         my-php-app
-                    '''
+                    '''                                 
                 }
             }
         }
