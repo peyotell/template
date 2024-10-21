@@ -31,13 +31,13 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
+                    // Запускаем временный контейнер на основе созданного Docker-образа для тестирования
+                    def testContainer = docker.image('my-php-app-deploy')
+
                     // Запускаем контейнер на основе созданного Docker-образа
-                    dockerImage.inside {
+                    testContainer.inside {
                         // Устанавливаем зависимости с помощью Composer
                         sh 'composer install'
-
-                        // Даем права на выполнение для phpunit и phing
-                        // sh 'chmod +x vendor/bin/phpunit vendor/bin/phing'
 
                         // Запускаем тесты с PHPUnit
                         sh 'vendor/bin/phpunit --configuration phpunit.xml'
