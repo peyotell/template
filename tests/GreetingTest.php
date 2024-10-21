@@ -1,5 +1,7 @@
 <?php
+namespace Tests;
 
+use Template\Greeting;
 use PHPUnit\Framework\TestCase;
 
 require_once('src/Greeting.php');

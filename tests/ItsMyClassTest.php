@@ -1,5 +1,7 @@
 <?php
+namespace Tests;
 
+use Template\ItsMyClass;
 use PHPUnit\Framework\TestCase;
 
 require_once('src/ItsMyClass.php');
