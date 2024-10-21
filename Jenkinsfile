@@ -9,14 +9,24 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Deployment Container') {
             steps {
                 script {
                     // Собираем Docker-образ на основе Dockerfile в рабочей директории Jenkins
-                    dockerImage = docker.build('my-php-image')
+                    docker.build('my-php-app', '-f Dockerfile.prod .')
                 }
             }
         }
+        
+        stage('Build Deployment Container') {
+            steps {
+                script {
+                    // Собираем временный контейнер
+                    docker.build('my-php-app-deploy', '-f Dockerfile.deploy .')
+                }
+            }
+        }
+
 
         stage('Run Tests') {
             steps {
