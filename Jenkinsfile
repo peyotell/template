@@ -9,7 +9,7 @@ pipeline {
             }
         }
 
-        stage('Build Deployment Container') {
+        stage('Build Production Container') {
             steps {
                 script {
                     // Собираем Docker-образ на основе Dockerfile в рабочей директории Jenkins
@@ -17,7 +17,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Build Deployment Container') {
             steps {
                 script {
@@ -69,10 +69,10 @@ pipeline {
 
     post {
         always {
-            // Всегда очищаем ненужные контейнеры
             script {
-                sh 'docker system prune -f'
+                // Удаляем временный контейнер после завершения
+                sh 'docker rm -f my-php-app-deploy || true'
             }
         }
-    }    
+    }
 }
