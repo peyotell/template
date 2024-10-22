@@ -1,5 +1,8 @@
 FROM php:8.2-apache
 
+#Игнорируем, что Apache не может определить полное доменное имя сервера
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 # Устанавливаем рабочую директорию
 WORKDIR /var/www/html
 
