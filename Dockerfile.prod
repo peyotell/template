@@ -18,7 +18,6 @@ RUN echo '<Directory /var/www/html>\n\
     Options Indexes FollowSymLinks\n\
     AllowOverride All\n\
     Require all granted\n\
-    DirectoryIndex index.php\n\
 </Directory>' >> /etc/apache2/sites-available/000-default.conf
 
 # Устанавливаем зависимости
