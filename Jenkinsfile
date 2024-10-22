@@ -60,9 +60,10 @@ pipeline {
                     sh '''
                     docker run -d -p 80:80 \
                         --name my-php-app \
-                        -v /path/to/data:/var/www/html \
+                        
                         my-php-app
-                    '''                                 
+                    '''     
+                    //-v /path/to/data:/var/www/html \                            
                 }
             }
         }
