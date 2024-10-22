@@ -61,8 +61,7 @@ pipeline {
                     docker run -d -p 80:80 \
                         --name my-php-app \
                         my-php-app        
-                    """    
-                    //-v /path/to/data:/var/www/html \                            
+                    """
                 }
             }
         }
