@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-#Игнорируем, что Apache не может определить полное доменное имя сервера
+#Set the 'ServerName' directive globally to suppress the message from Apache
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Устанавливаем рабочую директорию
@@ -12,6 +12,13 @@ COPY composer.json composer.lock /var/www/html/
 # Копируем остальной код приложения
 COPY public /var/www/html/
 COPY src /var/www/src/
+
+# Добавляем конфигурацию виртуального хоста Apache
+RUN echo '<Directory /var/www/html>\n\
+    Options Indexes FollowSymLinks\n\
+    AllowOverride All\n\
+    Require all granted\n\
+</Directory>' >> /etc/apache2/sites-available/000-default.conf
 
 # Устанавливаем права для файлов, чтобы Apache мог их обслуживать
 RUN chown -R www-data:www-data /var/www/html
