@@ -21,10 +21,6 @@ RUN echo '<Directory /var/www/html>\n\
     DirectoryIndex index.php\n\
 </Directory>' >> /etc/apache2/sites-available/000-default.conf
 
-# Устанавливаем права для файлов, чтобы Apache мог их обслуживать
-RUN chown -R www-data:www-data /var/www/html
-RUN chmod -R 755 /var/www/html
-
 # Устанавливаем зависимости
 RUN apt-get update && apt-get install -y zip unzip
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
