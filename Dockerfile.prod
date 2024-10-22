@@ -14,11 +14,14 @@ COPY src /var/www/html/src/
 COPY public /var/www/html/public/
 
 # Добавляем конфигурацию виртуального хоста Apache
-RUN echo '<Directory /var/www/html>\n\
-    Options Indexes FollowSymLinks\n\
-    AllowOverride All\n\
-    Require all granted\n\
-</Directory>' >> /etc/apache2/sites-available/000-default.conf
+RUN echo '<VirtualHost *:80>\n\
+    DocumentRoot /var/www/html/public\n\
+    <Directory /var/www/html>\n\
+        Options Indexes FollowSymLinks\n\
+        AllowOverride All\n\
+        Require all granted\n\
+    </Directory>\n\
+</VirtualHost>' >> /etc/apache2/sites-available/000-default.conf
 
 # Устанавливаем зависимости
 RUN apt-get update && apt-get install -y zip unzip
