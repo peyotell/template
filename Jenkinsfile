@@ -57,11 +57,11 @@ pipeline {
                     sh 'docker rm -f my-php-app || true'
 
                     // Запускаем новый контейнер
-                    sh '''
+                    sh """
                     docker run -d -p 80:80 \
-                        --name my-php-app \                        
-                        my-php-app
-                    '''     
+                        --name my-php-app \
+                        my-php-app        
+                    """    
                     //-v /path/to/data:/var/www/html \                            
                 }
             }
