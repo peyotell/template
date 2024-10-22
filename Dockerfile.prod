@@ -9,9 +9,9 @@ WORKDIR /var/www/html
 # Копируем файл composer.json в рабочую директорию
 COPY composer.json composer.lock /var/www/html/
 
-# Копируем остальной код приложения
-COPY public /var/www/html/
-COPY src /var/www/src/
+# Копировать остальной код приложения
+COPY src /var/www/html/src/
+COPY public /var/www/html/public/
 
 # Добавляем конфигурацию виртуального хоста Apache
 RUN echo '<Directory /var/www/html>\n\
@@ -24,8 +24,5 @@ RUN echo '<Directory /var/www/html>\n\
 RUN apt-get update && apt-get install -y zip unzip
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install
-
-# Перемещаем папку vendor на уровень выше
-RUN mv /var/www/html/vendor /var/www/
 
 EXPOSE 80
