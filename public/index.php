@@ -5,5 +5,4 @@ use Template\Greeting;
 use Template\ItsMyClass;
 
 echo Greeting::greet();
-echo ' ';
 echo ItsMyClass::greet();
